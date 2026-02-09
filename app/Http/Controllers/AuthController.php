@@ -206,7 +206,8 @@ class AuthController extends Controller
             ]);
 
             // Create Admin Role for this company
-            $adminRole = Role::create([
+            // Use query()->create() to bypass Spatie's software-level check that prevents shadowing global roles
+            $adminRole = Role::query()->create([
                 'name' => 'Admin',
                 'guard_name' => 'web',
                 'company_id' => $company->id
