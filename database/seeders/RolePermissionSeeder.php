@@ -104,11 +104,15 @@ class RolePermissionSeeder extends Seeder
             'invoice_settings',
 
         ];
-        $admin = Role::where('name', 'Admin')->first();
-        for ($i = 0; $i < count($permissions); $i++) {
-            $permission = Permission::firstOrCreate(['name' => $permissions[$i]]);
-            $admin->givePermissionTo($permission);
-            $permission->assignRole($admin);
+        $adminRoles = Role::where('name', 'Admin')->get();
+        
+        foreach ($permissions as $permissionName) {
+            $permission = Permission::firstOrCreate(['name' => $permissionName]);
+            
+            // Assign to all Admin roles
+            foreach ($adminRoles as $adminRole) {
+                $adminRole->givePermissionTo($permission);
+            }
         }
 
         // Create users idempotently and assign roles

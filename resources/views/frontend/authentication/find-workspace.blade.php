@@ -68,7 +68,7 @@
 
                         <div class="col-12 mt-4">
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary w-100">
+                                <button type="submit" class="create-account-btn w-100">
                                     Continue
                                 </button>
                             </div>

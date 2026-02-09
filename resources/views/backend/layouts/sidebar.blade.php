@@ -74,7 +74,7 @@ $route = request()->route()->getName();
                     </li>
                     @endif
                 </ul>
-                <!-- <ul class="nav nav-treeview">
+                <ul class="nav nav-treeview">
                     @if (auth()->user()->hasAnyPermission(['supplier_create','supplier_view','supplier_update','supplier_delete']))
                     <li class="nav-item">
                         <a href="{{route('backend.admin.suppliers.index')}}"
@@ -84,7 +84,7 @@ $route = request()->route()->getName();
                         </a>
                     </li>
                     @endif
-                </ul> -->
+                </ul>
             </li>
             @endif
             @if (auth()->user()->hasAnyPermission([
@@ -124,7 +124,7 @@ $route = request()->route()->getName();
                     </li>
                     @endcan
 
-                    <!-- @can('product_import')
+                    @can('product_import')
                     <li class="nav-item">
                         <a href="{{route('backend.admin.products.import')}}"
                             class="nav-link {{ request()->routeIs(['backend.admin.products.import']) ? 'active' : '' }}">
@@ -132,15 +132,15 @@ $route = request()->route()->getName();
                             <p>Product Import</p>
                         </a>
                     </li>
-                    @endcan -->
-                    <!-- @if (auth()->user()->hasAnyPermission(['brand_create','brand_view','brand_update','brand_delete']))
+                    @endcan
+                    @if (auth()->user()->hasAnyPermission(['brand_create','brand_view','brand_update','brand_delete']))
                     <li class="nav-item">
                         <a href="{{route('backend.admin.brands.index')}}"
                             class="nav-link {{ request()->routeIs(['backend.admin.brands.index', 'backend.admin.brands.create', 'backend.admin.brands.edit']) ? 'active' : '' }}">
                             <i class="fas fa-circle nav-icon"></i>
                             <p>Brand</p>
                         </a>
-                    </li>@endif -->
+                    </li>@endif
                     @if (auth()->user()->hasAnyPermission(['category_create','category_view','category_update','category_delete']))
                     <li class="nav-item">
                         <a href="{{route('backend.admin.categories.index')}}"
@@ -149,7 +149,7 @@ $route = request()->route()->getName();
                             <p>Category</p>
                         </a>
                     </li>@endif
-                    <!-- @if (auth()->user()->hasAnyPermission(['unit_create','unit_view','unit_update','unit_delete']))
+                    @if (auth()->user()->hasAnyPermission(['unit_create','unit_view','unit_update','unit_delete']))
                     <li class="nav-item">
                         <a href="{{route('backend.admin.units.index')}}"
                             class="nav-link {{ request()->routeIs([ 'backend.admin.units.index', 'backend.admin.units.create', 'backend.admin.units.edit']) ? 'active' : '' }}">
@@ -157,7 +157,7 @@ $route = request()->route()->getName();
                             <p>Unit</p>
                         </a>
                     </li>
-                    @endif -->
+                    @endif
                 </ul>
             </li>
             @endif
@@ -186,7 +186,7 @@ $route = request()->route()->getName();
                 </ul>
             </li>
             @endif
-            <!-- @if (auth()->user()->hasAnyPermission([
+            @if (auth()->user()->hasAnyPermission([
             'purchase_create',
             'purchase_view',
             'purchase_update',
@@ -215,13 +215,13 @@ $route = request()->route()->getName();
                         <a href="{{route('backend.admin.purchase.create')}}"
                             class="nav-link {{ request()->routeIs(['backend.admin.purchase.create']) ? 'active' : '' }}">
                             <i class="fas fa-circle nav-icon"></i>
-                            <p>Purchase Create</p>
+                            <p>Purchase Add</p>
                         </a>
                     </li>
                     @endcan
                 </ul>
             </li>
-            @endif -->
+            @endif
             @if (auth()->user()->hasAnyPermission([
             'reports_summary',
             'reports_sales',
