@@ -64,6 +64,97 @@ export default function Pos() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(false);
+    const barcodeInputRef = useRef(null);
+
+    const handleBarcodeScan = async (barcode) => {
+        try {
+            const res = await axios.get('/admin/get/products', {
+                params: { barcode: barcode.trim() },
+            });
+            const product = res.data.data || res.data;
+            if (product && product.id) {
+                addProductToCart(product.id, product.price);
+                toast.success(`Scanned: ${product.name}`);
+            }
+        } catch (error) {
+            console.error("Barcode scan error:", error);
+            if (error.response && error.response.status === 404) {
+                const sku = error.response.data.sku;
+                Swal.fire({
+                    title: 'Product Not Found',
+                    text: `Barcode ${sku} is not in the system. Would you like to add it quickly?`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Add it',
+                    cancelButtonText: 'No, Cancel'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const { value: formValues } = await Swal.fire({
+                            title: 'Quick Add Product',
+                            html:
+                                `<input id="swal-input1" class="swal2-input" placeholder="Product Name" value="${sku}">` +
+                                '<input id="swal-input2" class="swal2-input" type="number" placeholder="Selling Price">',
+                            focusConfirm: false,
+                            preConfirm: () => {
+                                return [
+                                    document.getElementById('swal-input1').value,
+                                    document.getElementById('swal-input2').value
+                                ]
+                            }
+                        });
+
+                        if (formValues && formValues[0] && formValues[1]) {
+                            try {
+                                const createRes = await axios.post('/admin/quick-create-product', {
+                                    name: formValues[0],
+                                    price: formValues[1],
+                                    sku: sku
+                                });
+                                const newProduct = createRes.data.product;
+                                addProductToCart(newProduct.id, newProduct.price);
+                                setProductUpdated(!productUpdated);
+                                toast.success("Product created and added to cart");
+                            } catch (createError) {
+                                toast.error(createError.response?.data?.message || "Failed to create product");
+                            }
+                        }
+                    }
+                });
+            } else {
+                toast.error("Error searching for barcode");
+            }
+        }
+    };
+
+    useEffect(() => {
+        let buffer = "";
+        let lastKeyTime = Date.now();
+
+        const handleKeyDown = (e) => {
+            const currentTime = Date.now();
+            
+            // Physical barcode scanners are very fast (usually < 30ms between characters)
+            if (currentTime - lastKeyTime > 100) {
+                buffer = ""; // Reset buffer if typing is slow (manual entry)
+            }
+            
+            lastKeyTime = currentTime;
+
+            if (e.key === 'Enter') {
+                if (buffer.length > 2) { // Minimum barcode length
+                    handleBarcodeScan(buffer);
+                    e.preventDefault();
+                }
+                buffer = "";
+            } else if (e.key.length === 1) {
+                buffer += e.key;
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
     const fullDomainWithPort = `${protocol}//${hostname}${
         port ? `:${port}` : ""
     }`;

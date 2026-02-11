@@ -88,7 +88,8 @@ Route::prefix('admin')->as('backend.admin.')->middleware(['admin'])->group(funct
     Route::get('/inventory/report', [ReportController::class, 'inventoryReport'])->name('inventory.report');
     //end report
    // start pos
-    Route::get('/get/products', [CartController::class, 'getProducts'])->name('getProducts');
+    Route::get('/get/products', [CartController::class, 'getProducts'])->name('get.products');
+    Route::post('/quick-create-product', [CartController::class, 'quickCreateProduct'])->name('quick.create.product');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::put('/cart/increment', [CartController::class, 'increment']);

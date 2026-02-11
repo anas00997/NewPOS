@@ -38,38 +38,56 @@ class CartController extends Controller
     public function getProducts(Request $request)
     {
         $branchId = auth()->user()->branch_id;
-        $productsQuery = Product::query()->forBranch($branchId);
+        $productsQuery = Product::query();
 
-        // If barcode is provided, auto-create product if not found in current branch
+        // If barcode is provided, try to find and add directly if it's a specific request
         if ($request->filled('barcode')) {
             $barcode = trim($request->barcode);
-            $existing = Product::query()->forBranch($branchId)->where('sku', $barcode)->first();
-            if (!$existing) {
-                // Create a minimal product record tied to current branch
-                Product::create([
-                    'name' => $barcode,
-                    'sku' => $barcode,
-                    'branch_id' => $branchId,
-                    'quantity' => 0,
-                    'status' => 1,
-                ]);
+            $product = Product::where('sku', $barcode)->first();
+            
+            if ($product) {
+                // Return this single product
+                if ($request->wantsJson()) {
+                    return new ProductResource($product);
+                }
             }
+            return response()->json(['message' => 'Product not found', 'sku' => $barcode], 404);
         }
 
-        // Search by name if provided
+        // Standard search
         $productsQuery->when($request->search, function ($query, $search) {
-            $query->where('name', 'LIKE', "%{$search}%");
-        });
-
-        // Search by barcode if provided
-        $productsQuery->when($request->barcode, function ($query, $barcode) {
-            $query->where('sku', $barcode);
+            $query->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('sku', 'LIKE', "%{$search}%");
         });
 
         $products = $productsQuery->latest()->paginate(96);
         if ($request->wantsJson()) {
             return ProductResource::collection($products);
         }
+    }
+
+    public function quickCreateProduct(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'sku' => 'required|string|max:255|unique:products,sku',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        $product = Product::create([
+            'name' => $request->name,
+            'sku' => $request->sku,
+            'price' => $request->price,
+            'purchase_price' => $request->price * 0.8, // Default 20% margin
+            'branch_id' => auth()->user()->branch_id,
+            'status' => 1,
+            'quantity' => 100, // Default stock for quick add
+        ]);
+
+        return response()->json([
+            'message' => 'Product created and added to cart',
+            'product' => new ProductResource($product)
+        ]);
     }
 
     public function store(Request $request)
