@@ -44,12 +44,14 @@ export default function Pos() {
     const [total, setTotal] = useState(0);
     const [paid, setPaid] = useState(0);
     const [due, setDue] = useState(0);
+    const [paymentMethod, setPaymentMethod] = useState("cash");
 
-    const [customerId, setCustomerId] = useState();
+    const [customerId, setCustomerId] = useState(1);
     const [newCustomerSelected, setNewCustomerSelected] = useState(null);
     const [cartUpdated, setCartUpdated] = useState(false);
     const [productUpdated, setProductUpdated] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [manualBarcode, setManualBarcode] = useState("");
     const [searchBarcode, setSearchBarcode] = useState("");
     const [scanInput, setScanInput] = useState("");
     const [scanning, setScanning] = useState(false);
@@ -390,6 +392,7 @@ export default function Pos() {
                     .put("/admin/order/create", {
                         customer_id: customerId,
                         paid_amount: paid,
+                        payment_method: paymentMethod,
                     })
                     .then((res) => {
                         setCartUpdated(!cartUpdated);
@@ -408,7 +411,7 @@ export default function Pos() {
     }
     return (
         <>  
-           <div className="col-12">
+           <div className="card-header">
                                     <CustomerSelect
                                         setCustomerId={setCustomerId}
                                         newCustomerSelected={newCustomerSelected}
@@ -536,21 +539,68 @@ export default function Pos() {
                                                 {due.toFixed(2)}
                                             </div>
                                         </div>
+
+                                        <div className="row text-bold mb-1 mt-2">
+                                            <div className="col">Payment Method:</div>
+                                            <div className="col text-right mr-2">
+                                                <div className="form-check form-check-inline">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="radio"
+                                                        name="paymentMethod"
+                                                        id="paymentCash"
+                                                        value="cash"
+                                                        checked={paymentMethod === "cash"}
+                                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                                    />
+                                                    <label className="form-check-label" htmlFor="paymentCash">Cash</label>
+                                                </div>
+                                                <div className="form-check form-check-inline">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="radio"
+                                                        name="paymentMethod"
+                                                        id="paymentCard"
+                                                        value="card"
+                                                        checked={paymentMethod === "card"}
+                                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                                    />
+                                                    <label className="form-check-label" htmlFor="paymentCard">Card</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                {/* <div className="col-6">
-                                <form className="form">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Enter barcode"
-                                        value={searchQuery}
-                                        onChange={(e) =>
-                                            setSearchQuery(e.target.value)
-                                        }
-                                    />
-                                </form>
-                            </div> */}
+                                <div className="col-12 mb-3">
+                                    <div className="input-group">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Scan or Type Barcode..."
+                                            value={manualBarcode}
+                                            onChange={(e) => setManualBarcode(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    handleBarcodeScan(manualBarcode);
+                                                    setManualBarcode("");
+                                                }
+                                            }}
+                                        />
+                                        <div className="input-group-append">
+                                            <button 
+                                                className="btn btn-primary" 
+                                                type="button"
+                                                onClick={() => {
+                                                    handleBarcodeScan(manualBarcode);
+                                                    setManualBarcode("");
+                                                }}
+                                            >
+                                                <i className="fas fa-barcode"></i> Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <Cart
                                 carts={carts}

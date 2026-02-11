@@ -117,8 +117,18 @@ if (!function_exists('nullImg')) {
 if (!function_exists('currency')) {
     function currency()
     {
-        return Cache::remember('default_currency', 60 * 24, function () {
+        $currency = Cache::remember('default_currency', 60 * 24, function () {
             return Currency::where('active', true)->first();
         });
+
+        if (!$currency) {
+            return (object) [
+                'symbol' => 'Rs',
+                'code' => 'PKR',
+                'name' => 'Pakistani Rupee'
+            ];
+        }
+
+        return $currency;
     }
 }

@@ -132,4 +132,16 @@ class CustomerController extends Controller
 
         return view('backend.orders.index', compact('orders'));
     }
+
+    public function getCustomers()
+    {
+        $customers = Customer::orderBy('name', 'asc')->get();
+        return response()->json($customers);
+    }
+
+    public function getCustomerById($id)
+    {
+        $customer = Customer::find($id);
+        return response()->json($customer);
+    }
 }

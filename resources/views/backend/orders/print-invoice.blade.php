@@ -84,9 +84,21 @@
               @endforeach
             </tbody>
           <tr>
-                <th>Total:</th>
-                <td class="text-right">{{currency()->symbol.' '.number_format($order->total,2,'.',',')}}</td>
-              </tr>
+            <th>Total:</th>
+            <td class="text-right">{{currency()->symbol.' '.number_format($order->total,2,'.',',')}}</td>
+          </tr>
+          <tr>
+            <th>Payment Method:</th>
+            <td class="text-right">{{ ucfirst($order->payment_method) }}</td>
+          </tr>
+          <tr>
+            <th>Paid Amount:</th>
+            <td class="text-right">{{ currency()->symbol.' '.number_format($order->paid, 2) }}</td>
+          </tr>
+          <tr>
+            <th>Due Amount:</th>
+            <td class="text-right">{{ currency()->symbol.' '.number_format($order->due, 2) }}</td>
+          </tr>
             </table>
         </div>
         <!-- /.col -->

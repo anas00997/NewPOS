@@ -115,7 +115,10 @@ class OrderController extends Controller
         
             $order->sub_total = $totalAmountOrder;
             $order->total = round((float)$totalAmountOrder, 2);
-            $order->status = true;
+            $order->paid = round((float)($request->paid_amount ?? 0), 2);
+            $order->due = round((float)($order->total - $order->paid), 2);
+            $order->payment_method = $request->payment_method ?? 'cash';
+            $order->status = $order->due <= 0;
             $order->save();
         
             PosCart::where('user_id', auth()->id())
