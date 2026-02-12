@@ -26,7 +26,9 @@ class Product extends Model
         'quantity',
         'price',
         'purchase_price',
-
+        'discount',
+        'discount_type',
+        'expire_date',
     ];
     public function setNameAttribute($value)
     {

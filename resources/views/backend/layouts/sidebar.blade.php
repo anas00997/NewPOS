@@ -100,7 +100,7 @@ $route = request()->route()->getName();
 
                     <i class="fas fa-box nav-icon"></i>
                     <p>
-                        Services
+                        Products
                         <i class="fas fa-angle-left right"></i>
                     </p>
                 </a>
@@ -110,7 +110,7 @@ $route = request()->route()->getName();
                         <a href="{{route('backend.admin.products.index')}}"
                             class="nav-link {{ request()->routeIs(['backend.admin.products.index', 'backend.admin.products.edit']) ? 'active' : '' }}">
                             <i class="fas fa-circle nav-icon"></i>
-                            <p>Service List</p>
+                            <p>Product List</p>
                         </a>
                     </li>
                     @endif
@@ -119,7 +119,7 @@ $route = request()->route()->getName();
                         <a href="{{route('backend.admin.products.create')}}"
                             class="nav-link {{ request()->routeIs(['backend.admin.products.create']) ? 'active' : '' }}">
                             <i class="fas fa-circle nav-icon"></i>
-                            <p>Service Add</p>
+                            <p>Product Add</p>
                         </a>
                     </li>
                     @endcan

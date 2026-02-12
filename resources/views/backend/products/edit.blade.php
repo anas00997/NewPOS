@@ -3,151 +3,239 @@
 @section('title', 'Update Product')
 
 @section('content')
-<div class="card">
-  <div class="card-body">
-    <form action="{{ route('backend.admin.products.update',$product->id) }}" method="post" class="accountForm"
-      enctype="multipart/form-data">
-      @csrf
-      @method('PUT')
-      <div class="card-body">
-        <div class="row">
-          <div class="mb-3 col-md-6">
-            <label for="title" class="form-label">
-              Name
-              <span class="text-danger">*</span>
-            </label>
-            <input type="text" class="form-control" placeholder="Enter title" name="name"
-              value="{{ old('name', $product->name) }}" required>
-          </div>
-          <!-- <div class="mb-3 col-md-6">
-            <label for="sku" class="form-label">
-              Sku
-              <span class="text-danger">*</span>
-            </label>
-            <input type="text" class="form-control" placeholder="Enter sku" name="sku"
-              value="{{ old('sku',$product->sku)}}" required>
-          </div> -->
-          <!-- <div class="mb-3 col-md-6">
-            <label for="brand_id" class="form-label">
-              Brand
-              <span class="text-danger">*</span>
-            </label>
-            <select class="form-control select2" style="width: 100%;" name="brand_id" required>
-              <option value="">Select Brand</option>
-              @foreach ($brands as $item)
-              <option value={{ $item->id }}
-                {{ $product->brand_id == $item->id ? 'selected' : '' }}>
-                {{ $item->name }}
-              </option>
-              @endforeach
-            </select>
-          </div> -->
-          <div class="mb-3 col-md-6">
-            <label for="category_id" class="form-label">
-              Category
-              <span class="text-danger">*</span>
-            </label>
-            <select class="form-control select2" style="width: 100%;" name="category_id" required>
-              <option value="">Select Category</option>
-              @foreach ($categories as $item)
-              <option value={{ $item->id }}
-                {{ $product->category_id == $item->id ? 'selected' : '' }}>
-                {{ $item->name }}
-              </option>
-              @endforeach
-            </select>
-          </div>
-
-          <!-- <div class="mb-3 col-md-6">
-            <label for="unit_id" class="form-label">
-              Unit
-              <span class="text-danger">*</span>
-            </label>
-            <select class="form-control" style="width: 100%;" name="unit_id" required>
-              <option value="">Select Unit</option>
-              @foreach ($units as $item)
-              <option value={{ $item->id }}
-                {{ $product->unit_id == $item->id ? 'selected' : '' }}>
-                {{ $item->title . ' (' . $item->short_name . ')' }}
-              </option>
-              @endforeach
-            </select>
-          </div> -->
-            <!-- <div class="mb-3 col-md-6">
-            <label for="quantity" class="form-label">
-            Slots Available
-              <span class="text-danger">*</span>
-            </label>
-            <input type="number" class="form-control" placeholder="Enter quantity" name="quantity"
-              value="{{ old('quantity',$product->quantity) }}" required>
-          </div> -->
-
-          <!-- <div class="mb-3 col-md-6">
-            <label for="thumbnailInput" class="form-label">
-              Image
-            </label>
-            <div class="image-upload-container" id="imageUploadContainer">
-              <input type="file" class="form-control" name="product_image" id="thumbnailInput" accept="image/*" style="display: none;">
-              <div class="thumb-preview" id="thumbPreviewContainer">
-                <img src="{{ asset('storage/' . $product->image) }}" alt="Thumbnail Preview"
-                  class="img-thumbnail" id="thumbnailPreview" onerror="this.onerror=null; this.src='{{ asset('assets/images/no-image.png') }}'">
-                <div class="upload-text d-none">
-                  <i class="fas fa-plus-circle"></i>
-                  <span>Upload Image</span>
-                </div>
-              </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Update Product</h3>
             </div>
-          </div> -->
+            <div class="card-body">
+                <form action="{{ route('backend.admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $product->name) }}" placeholder="Enter title" required>
+                                @error('name')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="sku">Sku <span class="text-danger">*</span></label>
+                                <input type="text" name="sku" id="sku" class="form-control @error('sku') is-invalid @enderror" value="{{ old('sku', $product->sku) }}" placeholder="Enter sku" required>
+                                @error('sku')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
 
-          <!-- <div class="mb-3 col-md-12">
-            <label for="description" class="form-label">
-              Description
-            </label>
-            <textarea class="form-control" placeholder="Enter description" name="description">{{ old('description',$product->description) }}</textarea>
-          </div> -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="brand_id">Brand <span class="text-danger">*</span></label>
+                                <select name="brand_id" id="brand_id" class="form-control select2 @error('brand_id') is-invalid @enderror" required>
+                                    <option value="">Select Brand</option>
+                                    @foreach($brands as $brand)
+                                        <option value="{{ $brand->id }}" {{ old('brand_id', $product->brand_id) == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('brand_id')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="category_id">Category <span class="text-danger">*</span></label>
+                                <select name="category_id" id="category_id" class="form-control select2 @error('category_id') is-invalid @enderror" required>
+                                    <option value="">Select Category</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('category_id')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
 
-          <!-- <div class="mb-3 col-md-6">
-            <label for="expire_date" class="form-label">
-              Expire date
-            </label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="price">Price <span class="text-danger">*</span></label>
+                                <input type="number" step="0.01" name="price" id="price" class="form-control @error('price') is-invalid @enderror" value="{{ old('price', $product->price) }}" placeholder="Enter price" required>
+                                @error('price')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="unit_id">Unit <span class="text-danger">*</span></label>
+                                <select name="unit_id" id="unit_id" class="form-control @error('unit_id') is-invalid @enderror" required>
+                                    <option value="">Select Unit</option>
+                                    @foreach($units as $unit)
+                                        <option value="{{ $unit->id }}" {{ old('unit_id', $product->unit_id) == $unit->id ? 'selected' : '' }}>{{ $unit->name }} ({{ $unit->short_name }})</option>
+                                    @endforeach
+                                </select>
+                                @error('unit_id')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="input-group date" id="reservationdate" data-target-input="nearest">
-              <input type="text" placeholder="Enter product expire date" class="form-control datetimepicker-input" data-target="#reservationdate" name="expire_date" value="{{ old('expire_date',$product->expire_date) }}" />
-              <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-              </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="discount_type">Discount Type</label>
+                                <select name="discount_type" id="discount_type" class="form-control">
+                                    <option value="">Select Discount Type</option>
+                                    <option value="fixed" {{ old('discount_type', $product->discount_type) == 'fixed' ? 'selected' : '' }}>Fixed</option>
+                                    <option value="percentage" {{ old('discount_type', $product->discount_type) == 'percentage' ? 'selected' : '' }}>Percentage</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="discount">Discount Amount</label>
+                                <input type="number" step="0.01" name="discount" id="discount" class="form-control @error('discount') is-invalid @enderror" value="{{ old('discount', $product->discount) }}" placeholder="Enter discount">
+                                @error('discount')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="purchase_price">Purchase Price <span class="text-danger">*</span></label>
+                                <input type="number" step="0.01" name="purchase_price" id="purchase_price" class="form-control @error('purchase_price') is-invalid @enderror" value="{{ old('purchase_price', $product->purchase_price) }}" placeholder="Enter purchase Price" required>
+                                @error('purchase_price')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label for="thumbnailInput">Image</label>
+                                <div class="image-upload-container" id="imageUploadContainer">
+                                    <input type="file" name="product_image" id="thumbnailInput" class="d-none" accept="image/*">
+                                    <div class="upload-area" id="thumbPreviewContainer">
+                                        <img src="{{ $product->image ? asset('storage/'.$product->image) : '' }}" alt="Preview" class="{{ $product->image ? '' : 'd-none' }}" id="thumbnailPreview">
+                                        <div class="upload-content text-center {{ $product->image ? 'd-none' : '' }}">
+                                            <i class="fas fa-plus-circle text-primary mb-2" style="font-size: 24px;"></i>
+                                            <p class="mb-0">Upload Image</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea name="description" id="description" rows="3" class="form-control" placeholder="Enter description">{{ old('description', $product->description) }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="expire_date">Expire date</label>
+                                <div class="input-group">
+                                    <input type="date" name="expire_date" id="expire_date" class="form-control" value="{{ old('expire_date', $product->expire_date) }}" placeholder="Enter product expire date">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="hidden" name="status" value="0">
+                                    <input type="checkbox" name="status" class="custom-control-input" id="status" value="1" {{ $product->status ? 'checked' : '' }}>
+                                    <label class="custom-control-label" for="status">Active</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div> -->
-          <div class="mb-3 col-md-12">
-            <div class="form-switch px-4">
-              <input type="hidden" name="status" value="0">
-              <input class="form-check-input" type="checkbox" name="status" id="active"
-                value="1" @if($product->status==1) checked @endif>
-              <label class="form-check-label" for="active">
-                Active
-              </label>
-            </div>
-          </div>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            <button type="submit" class="btn bg-gradient-primary">Update</button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
+    </div>
 </div>
 @endsection
-@push('script')
-<script src="{{ asset('js/image-field.js') }}"></script>
 
+@push('style')
+<style>
+    .image-upload-container {
+        width: 100%;
+        height: 150px;
+        border: 2px dashed #d2d6de;
+        border-radius: 5px;
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        overflow: hidden;
+    }
+    .image-upload-container:hover {
+        border-color: #007bff;
+    }
+    .upload-area img {
+        max-width: 100%;
+        max-height: 140px;
+        object-fit: contain;
+    }
+    .upload-content p {
+        color: #6c757d;
+        font-weight: 500;
+    }
+    .select2-container--default .select2-selection--single {
+        height: 38px !important;
+        padding: 6px 12px;
+        border: 1px solid #ced4da !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px !important;
+    }
+</style>
+@endpush
+
+@push('script')
 <script>
-  $(function() {
-    //Date picker
-    $('#reservationdate').datetimepicker({
-      format: 'YYYY-MM-DD'
+    $(document).ready(function() {
+        // Trigger file input click
+        $('#imageUploadContainer').on('click', function() {
+            $('#thumbnailInput').click();
+        });
+
+        // Image preview
+        $('#thumbnailInput').on('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#thumbnailPreview').attr('src', e.target.result).removeClass('d-none');
+                    $('.upload-content').addClass('d-none');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
     });
-  })
 </script>
 @endpush
