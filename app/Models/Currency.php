@@ -10,5 +10,6 @@ use App\Traits\BelongsToCompany;
 class Currency extends Model
 {
     use HasFactory, BelongsToCompany;
-    protected $fillable = ['name', 'code', 'symbol', 'company_id'];
+    protected $fillable = ['name', 'code', 'symbol', 'active', 'company_id'];
+    protected $casts = ['active' => 'boolean'];
 }

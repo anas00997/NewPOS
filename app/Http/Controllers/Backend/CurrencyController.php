@@ -7,6 +7,7 @@ use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class CurrencyController extends Controller
@@ -82,7 +83,13 @@ class CurrencyController extends Controller
 
         $validated = $request->validate([
             'name'   => 'required|string|max:255',
-            'code'   => 'required|string|unique:currencies,code',
+            'code'   => [
+                'required',
+                'string',
+                Rule::unique('currencies', 'code')->where(
+                    fn($query) => $query->where('company_id', auth()->user()->company_id)
+                ),
+            ],
             'symbol' => 'required|string',
         ]);
 
@@ -116,7 +123,13 @@ class CurrencyController extends Controller
 
         $validated = $request->validate([
             'name'   => 'required|string|max:255',
-            'code'   => 'required|string|unique:currencies,code,' . $currency->id,
+            'code'   => [
+                'required',
+                'string',
+                Rule::unique('currencies', 'code')
+                    ->where(fn($query) => $query->where('company_id', auth()->user()->company_id))
+                    ->ignore($currency->id),
+            ],
             'symbol' => 'required|string',
         ]);
 

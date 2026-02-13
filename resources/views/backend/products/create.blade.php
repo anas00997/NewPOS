@@ -18,7 +18,7 @@
                                 <label for="name">Name <span class="text-danger">*</span></label>
                                 <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Enter title" required>
                                 @error('name')
-                                    <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
@@ -27,7 +27,7 @@
                                 <label for="sku">Sku <span class="text-danger">*</span></label>
                                 <input type="text" name="sku" id="sku" class="form-control @error('sku') is-invalid @enderror" value="{{ old('sku') }}" placeholder="Enter sku" required>
                                 @error('sku')
-                                    <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
@@ -40,11 +40,11 @@
                                 <select name="brand_id" id="brand_id" class="form-control select2 @error('brand_id') is-invalid @enderror" required>
                                     <option value="">Select Brand</option>
                                     @foreach($brands as $brand)
-                                        <option value="{{ $brand->id }}" {{ old('brand_id') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
+                                    <option value="{{ $brand->id }}" {{ old('brand_id') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('brand_id')
-                                    <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
@@ -54,11 +54,11 @@
                                 <select name="category_id" id="category_id" class="form-control select2 @error('category_id') is-invalid @enderror" required>
                                     <option value="">Select Category</option>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('category_id')
-                                    <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                                 <label for="price">Price <span class="text-danger">*</span></label>
                                 <input type="number" step="0.01" name="price" id="price" class="form-control @error('price') is-invalid @enderror" value="{{ old('price') }}" placeholder="Enter price" required>
                                 @error('price')
-                                    <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
@@ -80,11 +80,11 @@
                                 <select name="unit_id" id="unit_id" class="form-control @error('unit_id') is-invalid @enderror" required>
                                     <option value="">Select Unit</option>
                                     @foreach($units as $unit)
-                                        <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>{{ $unit->name }} ({{ $unit->short_name }})</option>
+                                    <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>{{ $unit->name }} ({{ $unit->short_name }})</option>
                                     @endforeach
                                 </select>
                                 @error('unit_id')
-                                    <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
@@ -96,25 +96,38 @@
                                 <label for="discount_type">Discount Type</label>
                                 <select name="discount_type" id="discount_type" class="form-control">
                                     <option value="">Select Discount Type</option>
-                                    <option value="fixed" {{ old('discount_type') == 'fixed' ? 'selected' : '' }}>Fixed</option>
-                                    <option value="percentage" {{ old('discount_type') == 'percentage' ? 'selected' : '' }}>Percentage</option>
+                                    <option value="fixed" {{ old('discount_type', 'fixed') == 'fixed' ? 'selected' : '' }}>
+                                        Fixed
+                                    </option>
+                                    <option value="percentage" {{ old('discount_type', 'fixed') == 'percentage' ? 'selected' : '' }}>
+                                        Percentage
+                                    </option>
                                 </select>
                             </div>
 
+
                             <div class="form-group">
                                 <label for="discount">Discount Amount</label>
-                                <input type="number" step="0.01" name="discount" id="discount" class="form-control @error('discount') is-invalid @enderror" value="{{ old('discount') }}" placeholder="Enter discount">
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    name="discount"
+                                    id="discount"
+                                    class="form-control @error('discount') is-invalid @enderror"
+                                    value="{{ old('discount', 0) }}"
+                                    placeholder="Enter discount">
                                 @error('discount')
-                                    <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
+
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="purchase_price">Purchase Price <span class="text-danger">*</span></label>
                                 <input type="number" step="0.01" name="purchase_price" id="purchase_price" class="form-control @error('purchase_price') is-invalid @enderror" value="{{ old('purchase_price') }}" placeholder="Enter purchase Price" required>
                                 @error('purchase_price')
-                                    <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
 
@@ -192,23 +205,28 @@
         background-color: #f8f9fa;
         overflow: hidden;
     }
+
     .image-upload-container:hover {
         border-color: #007bff;
     }
+
     .upload-area img {
         max-width: 100%;
         max-height: 140px;
         object-fit: contain;
     }
+
     .upload-content p {
         color: #6c757d;
         font-weight: 500;
     }
+
     .select2-container--default .select2-selection--single {
         height: 38px !important;
         padding: 6px 12px;
         border: 1px solid #ced4da !important;
     }
+
     .select2-container--default .select2-selection--single .select2-selection__arrow {
         height: 36px !important;
     }

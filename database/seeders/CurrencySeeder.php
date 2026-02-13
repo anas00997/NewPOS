@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Company;
 use App\Models\Currency;
 
 class CurrencySeeder extends Seeder
@@ -69,11 +70,15 @@ class CurrencySeeder extends Seeder
             ['name' => 'Brunei Dollar', 'code' => 'BND', 'symbol' => 'B$']
         ];
 
-        $companyId = \App\Models\Company::first()->id ?? 1;
-        foreach ($currencies as $currency) {
-            $currency['company_id'] = $companyId;
-            // Idempotent seeding based on unique currency code and company
-            Currency::updateOrCreate(['code' => $currency['code'], 'company_id' => $companyId], $currency);
+        $companyIds = Company::query()->pluck('id');
+        foreach ($companyIds as $companyId) {
+            foreach ($currencies as $currency) {
+                $currency['company_id'] = $companyId;
+                Currency::updateOrCreate(
+                    ['code' => $currency['code'], 'company_id' => $companyId],
+                    $currency
+                );
+            }
         }
     }
 }
