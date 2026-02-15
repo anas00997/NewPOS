@@ -125,7 +125,7 @@
                                     <input type="file" name="product_image" id="thumbnailInput" class="d-none" accept="image/*">
                                     <div class="upload-area" id="thumbPreviewContainer">
                                         <img src="{{ $product->image ? asset('storage/'.$product->image) : '' }}" alt="Preview" class="{{ $product->image ? '' : 'd-none' }}" id="thumbnailPreview">
-                                        <div class="upload-content text-center {{ $product->image ? 'd-none' : '' }}">
+                                        <div class="upload-text text-center {{ $product->image ? 'd-none' : '' }}">
                                             <i class="fas fa-plus-circle text-primary mb-2" style="font-size: 24px;"></i>
                                             <p class="mb-0">Upload Image</p>
                                         </div>
@@ -201,10 +201,6 @@
         max-height: 140px;
         object-fit: contain;
     }
-    .upload-content p {
-        color: #6c757d;
-        font-weight: 500;
-    }
     .select2-container--default .select2-selection--single {
         height: 38px !important;
         padding: 6px 12px;
@@ -217,25 +213,5 @@
 @endpush
 
 @push('script')
-<script>
-    $(document).ready(function() {
-        // Trigger file input click
-        $('#imageUploadContainer').on('click', function() {
-            $('#thumbnailInput').click();
-        });
-
-        // Image preview
-        $('#thumbnailInput').on('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#thumbnailPreview').attr('src', e.target.result).removeClass('d-none');
-                    $('.upload-content').addClass('d-none');
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    });
-</script>
+<script src="{{ asset('js/image-field.js') }}"></script>
 @endpush
